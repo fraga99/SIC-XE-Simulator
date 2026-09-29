@@ -7,6 +7,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include(FetchContent)
 
+if(WIN32)
+    add_compile_definitions(_WIN32_WINNT=0x0A00)
+endif()
+
 # ==================================================
 # cpp-httplib configuration
 # ==================================================
@@ -149,6 +153,8 @@ target_include_directories(
     api
     PRIVATE
         ${CMAKE_SOURCE_DIR}/include
+        ${CMAKE_SOURCE_DIR}/lib/sic-xe/include
+
 )
 
 target_link_libraries(

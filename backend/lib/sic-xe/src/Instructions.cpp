@@ -1,5 +1,4 @@
 #include "Instructions.hpp"
-
 #include "DecodedInstruction.hpp"
 #include "architecture/CPUState.hpp"
 #include "memory/MemoryAccessor.hpp"
@@ -43,6 +42,50 @@ bool StsInstruction::execute(ExecutionContext& context) const
 // DEFINE_INSTRUCTION(StsInstruction)
 
 
+
+bool SttInstruction::execute(ExecutionContext& context) const 
+{ 
+    uint64_t t = context.registers.read("T");
+
+    std::vector<byte_t> buf = {
+        static_cast<byte_t>((t >> 16) & 0xff), // MSB
+        static_cast<byte_t>((t >> 8) & 0xff),
+        static_cast<byte_t>(t & 0xff)          // LSB
+    };
+
+    context.memory.write(context.instruction.displacement, buf);
+
+    return true;
+} 
+
+// DEFINE_INSTRUCTION(SttInstruction)
+
+
+
+bool JltInstruction::execute(ExecutionContext& context) const 
+{ 
+    uint64_t cc = context.registers.read("SW") & 0x030000; // máscara do CC (bits 16-17, conforme decisão do Beck/PR)
+
+    if (cc == 0x010000) { // 01 = <
+        context.registers.write("PC", context.instruction.displacement);
+        return false; // false porque o PC já foi setado manualmente, não deve ser incrementado de novo em step()
+    }
+
+    return true;
+}
+
+
+
+
+
+
+//DEFINE_INSTRUCTION(JltInstruction)
+
+
+
+
+
+
 DEFINE_INSTRUCTION(AddFInstruction)
 DEFINE_INSTRUCTION(AddRInstruction)
 DEFINE_INSTRUCTION(AndInstruction)
@@ -59,7 +102,6 @@ DEFINE_INSTRUCTION(HioInstruction)
 DEFINE_INSTRUCTION(JInstruction)
 DEFINE_INSTRUCTION(JeqInstruction)
 DEFINE_INSTRUCTION(JgtInstruction)
-DEFINE_INSTRUCTION(JltInstruction)
 DEFINE_INSTRUCTION(JsubInstruction)
 DEFINE_INSTRUCTION(LdaInstruction)
 DEFINE_INSTRUCTION(LdbInstruction)
@@ -70,7 +112,6 @@ DEFINE_INSTRUCTION(LdsInstruction)
 DEFINE_INSTRUCTION(LdtInstruction)
 DEFINE_INSTRUCTION(LdxInstruction)
 DEFINE_INSTRUCTION(LpsInstruction)
-DEFINE_INSTRUCTION(MulInstruction)
 DEFINE_INSTRUCTION(MulFInstruction)
 DEFINE_INSTRUCTION(MulRInstruction)
 DEFINE_INSTRUCTION(NormInstruction)
@@ -89,7 +130,6 @@ DEFINE_INSTRUCTION(StfInstruction)
 DEFINE_INSTRUCTION(StiInstruction)
 DEFINE_INSTRUCTION(StlInstruction)
 DEFINE_INSTRUCTION(StswInstruction)
-DEFINE_INSTRUCTION(SttInstruction)
 DEFINE_INSTRUCTION(StxInstruction)
 DEFINE_INSTRUCTION(SubInstruction)
 DEFINE_INSTRUCTION(SubFInstruction)
