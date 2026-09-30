@@ -141,7 +141,7 @@ DEFINE_INSTRUCTION(SubInstruction, ValueOperand)
 DEFINE_INSTRUCTION(SubFInstruction, ValueOperand)
 DEFINE_INSTRUCTION(SubRInstruction, RegistersOperand)
 
-DEFINE_INSTRUCTION(SvcInstruction, RegisterOperand)
+//DEFINE_INSTRUCTION(SvcInstruction, RegisterOperand)
 
 DEFINE_INSTRUCTION(TdInstruction, ValueOperand)
 DEFINE_INSTRUCTION(TioInstruction, NoneOperand)
