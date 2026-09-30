@@ -75,6 +75,16 @@ bool JltInstruction::execute(ExecutionContext& context, AddressOperand operand) 
     return true;
 }
 
+bool SubRInstruction::execute(ExecutionContext& context, RegistersOperand operand) const
+{
+    uint64_t r1 = context.registers.read(operand.r1);
+    uint64_t r2 = context.registers.read(operand.r2);
+
+    context.registers.write(operand.r2, r2 - r1);
+
+    return true;
+}
+
 DEFINE_INSTRUCTION(AddFInstruction, ValueOperand)
 DEFINE_INSTRUCTION(AddRInstruction, RegistersOperand)
 
@@ -139,7 +149,6 @@ DEFINE_INSTRUCTION(StxInstruction, AddressOperand)
 
 DEFINE_INSTRUCTION(SubInstruction, ValueOperand)
 DEFINE_INSTRUCTION(SubFInstruction, ValueOperand)
-DEFINE_INSTRUCTION(SubRInstruction, RegistersOperand)
 
 //DEFINE_INSTRUCTION(SvcInstruction, RegisterOperand)
 
